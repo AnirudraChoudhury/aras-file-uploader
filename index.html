@@ -1,64 +1,79 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <title>Upload File to Aras Vault</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Upload & View Files - Aras Vault</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
-  <div class="container max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-8 border-b-2 border-blue-500 pb-2 flex items-center justify-center gap-2">
-      <span>🚀</span> Aras Vault File Uploader
+
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+      <span>🚀</span> Aras Vault File Uploader & Viewer
     </h2>
-    <div class="mb-4 flex justify-center">
-      <span id="statusIndicator" class="inline-block px-4 py-1 rounded-full text-xs font-semibold uppercase bg-green-100 text-green-800">Ready</span>
+
+    <!-- Status Indicator -->
+    <div class="mb-4">
+      <span id="statusIndicator"
+        class="px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold uppercase">Ready</span>
     </div>
-    <div class="mb-6">
-      <div class="mb-4 grid grid-cols-1 gap-2">
-        <label class="block text-gray-700 font-medium">Base Server URL (e.g. http://localhost/vedanix):
-          <input type="text" id="baseServerInput" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="http://localhost/vedanix">
-        </label>
-        <label class="block text-gray-700 font-medium">Auth Token:
-          <input type="text" id="authTokenInput" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="">
-        </label>
-        <label class="block text-gray-700 font-medium">Vault ID:
-          <input type="text" id="vaultIdInput" class="mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" value="">
-        </label>
-      </div>
-      <div class="mb-4">
-        <input type="file" id="fileInput" onchange="showFileInfo()" class="block w-full text-sm text-gray-700 border-2 border-dashed border-blue-400 rounded-lg cursor-pointer bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 transition" />
-      </div>
-      <div id="fileInfo" class="hidden bg-blue-50 p-3 rounded mb-3">
-        <div class="font-semibold">Selected File: <span id="fileName"></span></div>
+
+    <!-- Configuration -->
+    <div class="grid grid-cols-1 gap-4 mb-6">
+      <input type="text" id="baseServerInput" class="input"
+        placeholder="Base Server URL (e.g. http://localhost/vedanix)" value="http://localhost/vedanix">
+      <input type="text" id="authTokenInput" class="input" placeholder="Auth Token">
+      <input type="text" id="vaultIdInput" class="input" placeholder="Vault ID">
+    </div>
+
+    <!-- File Input -->
+    <div class="mb-4">
+      <input type="file" id="fileInput" onchange="showFileInfo()"
+        class="block w-full text-sm text-gray-700 border-2 border-dashed border-blue-400 rounded bg-blue-50 p-2">
+      <div id="fileInfo" class="hidden mt-2 text-sm">
+        <div>📄 <strong id="fileName"></strong></div>
         <div>Size: <span id="fileSize"></span></div>
         <div>Type: <span id="fileType"></span></div>
       </div>
-      <button class="upload-button w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2" onclick="uploadFile()" id="uploadBtn">
-        <span>📤</span> Upload File
-      </button>
     </div>
-    <!-- <div class="bg-blue-50 p-3 rounded mb-4">
-      <label class="inline-flex items-center">
-        <input type="checkbox" id="chunkUpload" checked class="form-checkbox h-5 w-5 text-blue-600">
-        <span class="ml-2 text-gray-700 font-medium">Enable Chunked Upload (Recommended for large files)</span>
-      </label>
-    </div> -->
-    <div id="progressSection" class="mb-4 hidden">
-      <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-        <div id="progressFill" class="bg-blue-600 h-4 transition-all duration-300" style="width:0%"></div>
+
+    <!-- Upload Button -->
+    <button onclick="uploadFile()" id="uploadBtn"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:bg-gray-300">📤 Upload
+      File</button>
+
+    <!-- Progress -->
+    <div id="progressSection" class="hidden mt-4">
+      <div class="w-full bg-gray-200 rounded-full h-4">
+        <div id="progressFill" class="bg-blue-600 h-4" style="width:0%"></div>
       </div>
-      <div id="progressText" class="text-center text-blue-700 font-semibold mt-1">0%</div>
+      <div id="progressText" class="text-center text-blue-700 text-sm mt-1">0%</div>
     </div>
-    <div class="font-semibold text-gray-700 mb-2 flex items-center gap-2"><span>📋</span> Upload Log:</div>
-    <pre id="log" class="bg-gray-900 text-green-400 p-3 rounded h-40 overflow-y-auto text-xs leading-relaxed whitespace-pre-wrap">Ready to upload files...</pre>
-    <div class="text-center text-gray-400 text-xs mt-6">
-      Built with SOLID principles • Modular Architecture • Extensible Design
-      by <a href="https://anirudrachoudhury.vercel.app" class="text-blue-500 hover:underline">Anirudra Choudhury</a>
+
+    <!-- Log -->
+    <div class="mt-4">
+      <h3 class="font-semibold mb-1">📋 Upload Log</h3>
+      <pre id="log"
+        class="bg-gray-900 text-green-400 p-3 rounded h-40 overflow-y-auto text-xs">Ready to upload files...</pre>
     </div>
+
+    <!-- File Viewer -->
+    <div class="mt-10">
+      <h3 class="text-xl font-semibold mb-2">📁 Uploaded Files</h3>
+      <button onclick="loadFiles()" class="mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">🔄 Refresh
+        Files</button>
+      <div id="fileList"
+        class="space-y-2 bg-gray-50 p-4 rounded shadow-sm max-h-96 overflow-y-auto text-sm text-gray-800">Click refresh
+        to view uploaded files.</div>
+    </div>
+
+    <p class="text-center text-xs text-gray-400 mt-6">Made with ❤️ by Anirudra Choudhury</p>
   </div>
-  <!-- Import the refactored JavaScript module -->
+
   <script src="./js/aras-file-uploader.js"></script>
+  <script src="./js/ui-utils.js"></script>
+  <script src="./js/download-file.js"></script>
   <script>
     // Initialize the upload service using the factory
     let uploadService;
@@ -70,29 +85,20 @@
       const fileName = document.getElementById('fileName');
       const fileSize = document.getElementById('fileSize');
       const fileType = document.getElementById('fileType');
-      
+
       if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         fileName.textContent = file.name;
-        fileSize.textContent = formatFileSize(file.size);
+        fileSize.textContent = formatFileSize(file.size); // Now from ui-utils.js
         fileType.textContent = file.type || 'Unknown';
         fileInfo.style.display = 'block';
-        
+
         // Enable upload button
         document.getElementById('uploadBtn').disabled = false;
       } else {
         fileInfo.style.display = 'none';
         document.getElementById('uploadBtn').disabled = true;
       }
-    }
-
-    // Format file size for display
-    function formatFileSize(bytes) {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
     // Update status indicator
@@ -112,7 +118,7 @@
     function updateProgress(percent) {
       const progressFill = document.getElementById('progressFill');
       const progressText = document.getElementById('progressText');
-      
+
       progressFill.style.width = percent + '%';
       progressText.textContent = Math.round(percent) + '%';
     }
@@ -123,10 +129,10 @@
         super(elementId);
         this.isUploading = false;
       }
-      
+
       log(message) {
         super.log(message);
-        
+
         // Update UI based on log messages
         if (message.includes('Starting upload process')) {
           this.isUploading = true;
@@ -149,7 +155,7 @@
           }
         }
       }
-      
+
       error(message, error) {
         super.error(message, error);
         this.isUploading = false;
@@ -161,7 +167,7 @@
 
     // Override the factory to use our enhanced logger
     const originalCreate = ArasFileUploadServiceFactory.create;
-    ArasFileUploadServiceFactory.create = function(baseUrl, vaultUrl, authToken, vaultId, logElementId) {
+    ArasFileUploadServiceFactory.create = function (baseUrl, vaultUrl, authToken, vaultId, logElementId) {
       const config = new ArasConfig(baseUrl, vaultUrl, authToken, vaultId);
       const logger = new UILogger(logElementId || 'log');
       return new ArasFileUploadService(config, logger);
@@ -210,57 +216,108 @@
       }
     }
 
-    // Utility function to demonstrate extensibility
-    function generateGuid() {
-      return GuidGenerator.generate();
-    }
-
     // Initialize UI on load
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Initially disable upload button
       document.getElementById('uploadBtn').disabled = true;
-      
+
       // Add drag and drop functionality
       const fileInput = document.getElementById('fileInput');
       const container = document.querySelector('.container');
-      
+
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         container.addEventListener(eventName, preventDefaults, false);
       });
-      
+
       function preventDefaults(e) {
         e.preventDefault();
         e.stopPropagation();
       }
-      
+
       ['dragenter', 'dragover'].forEach(eventName => {
         container.addEventListener(eventName, highlight, false);
       });
-      
+
       ['dragleave', 'drop'].forEach(eventName => {
         container.addEventListener(eventName, unhighlight, false);
       });
-      
+
       function highlight(e) {
         container.style.backgroundColor = '#e7f3ff';
       }
-      
+
       function unhighlight(e) {
         container.style.backgroundColor = 'white';
       }
-      
+
       container.addEventListener('drop', handleDrop, false);
-      
+
       function handleDrop(e) {
         const dt = e.dataTransfer;
         const files = dt.files;
-        
+
         if (files.length > 0) {
           fileInput.files = files;
           showFileInfo();
         }
       }
     });
+    async function loadFiles() {
+      const baseServer = document.getElementById('baseServerInput').value;
+      const authToken = document.getElementById('authTokenInput').value;
+
+      if (!baseServer || !authToken) {
+        alert("Please enter server URL and token.");
+        return;
+      }
+
+      const baseUrl = baseServer.replace(/\/$/, '') + "/server/odata";
+      const fileList = document.getElementById('fileList');
+      fileList.innerHTML = "Loading...";
+
+      try {
+        const res = await fetch(`${baseUrl}/File?$orderby=created_on desc&$top=50`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`
+          }
+        });
+
+        if (!res.ok) throw new Error("Failed to load files");
+
+        const data = await res.json();
+        fileList.innerHTML = "";
+
+        if (data.value.length === 0) {
+          fileList.textContent = "No files uploaded.";
+          return;
+        }
+
+        data.value.forEach(file => {
+          const card = document.createElement('div');
+          card.className = "border p-3 rounded shadow-sm bg-gray-50";
+
+          const fileType = file.mime_type?.startsWith("image/") ? "image" :
+            file.mime_type === "application/pdf" ? "pdf" : "other";
+
+          card.innerHTML = `
+        <div class="flex justify-between items-center">
+          <strong>${file.filename}</strong>
+          <button onclick="downloadFile('${file.id}', '${file.filename}')" class="text-blue-600 hover:underline">Download</button>
+        </div>
+        
+
+        <div class="text-sm text-gray-600">Size: ${formatFileSize(file.file_size || 0)}</div>
+        <div class="text-sm text-gray-600">Created: ${new Date(file.created_on).toLocaleString()}</div>
+      `;
+
+          fileList.appendChild(card);
+        });
+      } catch (err) {
+        console.error(err);
+        fileList.textContent = "Failed to load files.";
+      }
+    }
   </script>
 </body>
+
 </html>

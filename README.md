@@ -10,6 +10,7 @@ This project is a web-based tool for uploading files to an Aras Innovator Vault 
 index.html                  # Main web interface
 js/
   aras-file-uploader.js     # JavaScript logic for file upload
+  ui-utils.js               # Shared utility functions (formatting, GUID, etc.)
 docs/
   userguide.md              # End-user guide (see below)
 README.md                   # Project documentation
@@ -88,3 +89,7 @@ If you run the application from the link (e.g., http://anirudrachoudhury.github.
 - Temporarily disable:
   - Antivirus/web protection (e.g., Norton, McAfee, Kaspersky).
   - Firewall rules blocking scripts.
+
+## Recent Changes
+
+- Utility functions such as `formatFileSize` and `generateGuid` have been moved from `index.html` to `js/ui-utils.js` for better modularity and maintainability. Be sure to include this script in your HTML.

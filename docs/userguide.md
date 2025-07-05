@@ -14,6 +14,7 @@ Welcome to the **Aras Vault File Uploader**! This guide will walk you through th
 6. [Chunked Uploads](#chunked-uploads)
 7. [Troubleshooting](#troubleshooting)
 8. [Further Reading](#further-reading)
+9. [File Structure Update](#file-structure-update)
 
 ---
 
@@ -131,20 +132,19 @@ To upload files, you need the **Vault ID** of your target vault. Here’s how to
 3. **Select a File:**  
    - Click the file input or drag and drop a file into the window.
 
-4. **Enable/Disable Chunked Upload:**  
-   - By default, chunked upload is enabled (recommended for large files).
-
-5. **Upload:**  
+4. **Upload:**  
    - Click the **Upload File** button.
    - Monitor progress and logs in the interface.
+
+5. **View Uploaded Files:**  
+   - Use the **Uploaded Files** section at the bottom of the page to view, preview, or download files you have uploaded.
+   - Click **Refresh Files** to update the list. Images and PDFs will show a preview; other file types provide a download link.
 
 ---
 
 ## Chunked Uploads
 
-- **Chunked Upload** splits large files into smaller parts for reliable transfer.
-- Recommended for files larger than a few MB.
-- You can disable this option for small files.
+*Chunked upload is no longer available as an option. All uploads are handled automatically by the application.*
 
 ---
 
@@ -202,6 +202,14 @@ If your Aras server is running on HTTP (not HTTPS) and you access the uploader v
 - [Aras Innovator 2025 RESTful API Documentation (PDF)](https://aras.com/wp-content/uploads/2025/06/Aras-Innovator-2025-Release-RESTful-API.pdf)
 - [Aras Innovator Documentation](https://www.aras.com/support/documentation)
 - [OAuth2 Authentication Overview](https://oauth.net/2/)
+
+---
+
+## File Structure Update
+
+- Utility functions (e.g., file size formatting, GUID generation) have been moved from `index.html` to a new file: `js/ui-utils.js`.
+- The main HTML now imports this script for shared logic.
+- The application now includes a built-in file viewer for uploaded files, supporting previews for images and PDFs, and download links for all files.
 
 ---
 
